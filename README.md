@@ -27,3 +27,25 @@ and | R | R[rd] = R[0] & R[1] | and rd | 111 | 00 | Clears carry bit
 xor | R | R[rd] = R[0] ^ R[1] | xor rd | 111 | 01 | Clears carry bit
 rxor | R | R[rd] = ^R[0] ^ pari | rxor rd | 111 | 10 | Modifies parity bit
 or | R | R[rd] = R[0] \| R[1] | or rd | 111 | 11 | Clears carry bit
+
+## Instruction Types
+
+The processor supports four different types of instructions.
+
+**R type**
+ - Five bits differentiating the instruction (three bits opcode and two bits function code)
+ - Four bits to specify a destination register
+
+**I type**
+ - Three bits for the opcode (no function code necessary in this case)
+ - One bit to specify a destination register (either R0 or R1)
+ - Five bits to specify a lookup table pointer to an immediate value (the ALU LUT stores up to 32 values)
+  
+**B type**
+ - Five bits differentiating the instruction, just like R type
+ - Four bits to specify a lookup table pointer to the desired program counter value (the branch LUT stores up to 16 values)
+
+**M type**
+ - Four bits for the instruction, with three bits opcode and one bit function code; this is because we have two separate mov instructions
+ - Five bits to identify the source and destination registers (one bit for the register that is R0 or R1, and four for the other register)
+ - Both mov instructions can be used interchangeably when writing assembly; the assembler automatically determines which to use
