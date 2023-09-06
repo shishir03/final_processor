@@ -1,0 +1,14 @@
+addi r0 00000       // offset of 30
+mov r2 r0           // r2 now contains offset
+
+
+
+Pseudocode:
+
+for(i = 0; i < 29; i++) {
+    a = mem[i];
+    b = mem[i + 1];
+    for(j = 0; j < 16; j++) {
+        
+    }
+}

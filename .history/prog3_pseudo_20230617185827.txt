@@ -1,0 +1,61 @@
+totalCount = 0            // r8
+byteCount = 0             // r9
+byteMatches = 0           // r10
+
+for(i = 0; i < 31; i++) {         // r15
+    m1 = mem[i]         // r2
+    m2 = mem[i + 1]     // r3
+    p1 = mem[32][7:3]   // r4
+    p2 = 8'b0           // r5
+    mask1 = 8'b11111000 // r6
+    mask2 = 8'b0        // r7
+    byteMatched = 0     // r11
+
+    for(j = 0; j < 8; j++) {     // r14
+        match1 = m1 ^ p1       // r12
+        match2 = m2 ^ p2       // r13
+
+        f1 = mask1 & match1
+        f2 = mask2 & match2
+
+        if(f1 + f2 == 0) {
+            totalCount++
+            if(j < 4) {
+                byteMatched = byteMatched | 1
+                byteCount++
+            }
+        }
+
+        p1 = p1 >> 1
+        p2 = p2 >> 1
+        mask1 = mask1 >> 1
+        mask2 = mask2 >> 1
+    }
+
+    byteMatches += byteMatched
+}
+
+m1 = mem[31]               // r2
+p1 = pattern               // r4
+mask = 8'b11111000         // r6
+byteMatched = 0            // r11
+
+// Handle the last byte
+for(j = 0; j < 4; j++) {
+    match1 = m1 ^ p1
+    f1 = mask1 & match1
+    if(f1 == 0) {
+        totalCount++
+        byteCount++
+        byteMatched = byteMatched | 1
+    }
+
+    p1 = p1 >> 1
+    mask1 = mask1 >> 1
+}
+
+byteMatches += byteMatched
+
+mem[33] = byteMatches
+mem[34] = byteCount
+mem[35] = totalCount

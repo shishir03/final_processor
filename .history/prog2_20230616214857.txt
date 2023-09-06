@@ -1,0 +1,109 @@
+lb r0 00101
+mov r15 r0              // start
+lbr r2
+addi r0 00000
+lbr r3
+mov r0 r2
+mov r5 r0
+mov r0 r3
+mov r6 r0               // r5 = r2 = LSB, r6 = r3 = MSB
+lb r0 01000
+mov r14 r0
+lb r1 00110             // shift loop start (16x iterations) - r1 loads bitmask
+mov r0 r3
+and r1                  // r1 = leftmost bit
+mov r0 r4
+xor r4                  // r4 keeps track of total xor
+mov r0 r2               // left shift
+lsl r2
+mov r0 r3
+lsl r3
+lb r1 00111
+mov r0 r14
+addi r0 00000
+mov r14 r0
+blt 0001
+mov r0 r4               // r0 = total xor
+lb r1 01000             // r1 = 0
+beq 0010                // is the xor 0? (i.e. is the message error-free)
+mov r0 r5
+lb r1 01001
+and r0
+rxor r0
+mov r0 r6
+rxor r0
+lb r1 01000
+bne 0010                // does p0 = 0? (if so, there are 2 errors)
+lb r1 00110
+mov r1 r6
+lb r0 01000
+lb r1 01000
+beq 0011                // unconditional branch
+mov r0 r6              // .next
+lsr r6
+lb r1 01010            // mask for b1 of the original message
+mov r0 r5
+and r0                 // gets b1
+lsl r0
+xor r5
+lb r1 01100            // zeroes out parity bits
+mov r0 r5
+xor r0
+mov r1 r6
+lsr r1
+lsr r0
+lsr r1
+lsr r0
+lsr r1
+lsr r0
+lsr r1
+lsr r0
+mov r5 r0
+mov r6 r1
+lb r1 01000
+mov r0 r4
+bne 0011                // check for rxor of 0 (if so, error correcting can be skipped)
+lb r1 01011
+mov r0 r6
+xor r6                 // set single error flag for MSB
+mov r0 r4
+lb r1 01110            // r1 = 8
+blt otherthing         // is r4 < 8?
+sub r0
+subi r0 00000           // otherthing
+mov r7 r0               // r0 = shift amt
+lb r1 01000
+beq errorcorrect        // if shift amt already equals 0, then skip the shift loop
+lb r0 01101
+mov r8 r0               // r8 contains bitmask
+lb r0 01000
+mov r12 r0              // shift loop begin
+mov r0 r8
+lsl r8
+mov r0 12
+addi r0 00000
+mov r12 r0
+mov r1 r7
+blt loopbegin
+mov r0 r4              // errorcorrect
+lb r1 01110
+blt otherotherthing
+mov r0 r8
+mov r1 r6
+xor r6
+lb r0 01000
+lb r1 01000
+beq 0011                  // unconditional branch
+mov r0 r8
+mov r1 r5
+xor r5
+mov r0 r15               // end
+subi r0 00001
+sbr r5
+addi r0 00000
+sbr r6
+mov r0 r15
+addi r0 00010
+mov r15 r0
+lb r1 01111
+blt start

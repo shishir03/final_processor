@@ -1,0 +1,63 @@
+lbr r2                 // r2 = mem[r0]
+addi r0 00000          // r0++
+lbr r3                 // r3 = mem[r0]
+mov r15 r0             // r15 = r0
+mov r0 r3
+lsl r3                 // Left shift (4x)
+mov r0 r2
+lsl r2
+mov r0 r3
+lsl r3
+mov r0 r2
+lsl r2
+mov r0 r3
+lsl r3
+mov r0 r2
+lsl r2
+mov r0 r3
+lsl r3
+mov r0 r2
+lsl r0
+rxor r1                // r1 = ^(b11:b5)
+lsl r0                 // r0 = r0 << 1
+xor r2                 // r2 = r0 ^ r1
+mov r0 r15             // r0 = r15
+addi r0 00001          // r0 += 30
+sbr r2
+lb r1 00000            // r1 = mem[60] = 8'b00010000
+mov r0 r3              // r0 = r3
+and r0                 // r0 = 8'b000x0000
+lsr r4                 // r4 = 8'b0000x000
+lb r1 00001            // r1 = mem[61] = 8'b11100000
+mov r0 r3
+and r0                 // r0 = 8'bxxx00000
+mov r5 r0
+mov r1 r4              // r1 = 8'b0000x000
+and r3                 // r3 = 8'bxxx0x000
+lb r1 00010            // r1 = mem[62] = 8'b11110000
+mov r0 r2
+and r0                 // r0 = 8'bxxxx0000
+rxor r0
+mov r0 r5
+rxor r0
+lsl r0
+lsl r0
+lsl r0
+lsl r0
+mov r1 r3
+xor r3                 // r3 = 8'bxxxxx000
+lb r1 00011            // r1 = mem[63] = 8'11001100
+mov r0 r2
+and r0
+rxor r0
+mov r0 r3
+and r0
+rxor r0
+lsl r0
+lsl r0
+mov r1 r3
+xor r3
+lb r1 00100
+mov r0 r2
+and r0
+rxor r0
